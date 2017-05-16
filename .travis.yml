@@ -1,0 +1,19 @@
+notifications:
+  email: false
+services:
+- docker
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::8}
+  - DOCKER_USER=29eae9bd-0642-4e46-8abc-04e5661ead4f
+  - DOCKER_REGISTRY=comae-on.azurecr.io
+  - DOCKER_REPOSITORY=comaeio/nginx-geoip
+  - COMMIT=${TRAVIS_COMMIT::8}
+after_success:
+- echo "Test Success - Branch(\"$TRAVIS_BRANCH\")"
+- docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" $DOCKER_REGISTRY
+- docker build -f Dockerfile -t $DOCKER_REPOSITORY:$COMMIT .
+- docker tag $DOCKER_REPOSITORY:$COMMIT $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$TRAVIS_BRANCH
+- docker tag $DOCKER_REPOSITORY:$COMMIT $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
+- docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY
+

@@ -7,3 +7,5 @@ RUN gunzip GeoLiteCity.dat.gz
 
 RUN mv GeoLiteCity.dat /usr/share/GeoIP/
 COPY ./nginx.conf /etc/nginx/
+
+CMD ["nginx", "-g", "daemon off;"]
